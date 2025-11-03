@@ -1,82 +1,123 @@
 <!DOCTYPE html>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
-<style>
-:root{
---bg-start:#eef2ff; --bg-end:#f8fafc; --text:#0f172a; --muted:#475569; --brand:#4f46e5; --border:#e2e8f0; --card:#ffffff; --row:#f1f5f9; --shadow:0 10px 25px rgba(15,23,42,.08);
-}
-body {
-font-family: 'Inter', system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
-background: linear-gradient(135deg, var(--bg-start), var(--bg-end));
-color: var(--text);
-margin: 0; padding: 0; min-height: 100vh; display: flex; justify-content: center; align-items: flex-start; flex-direction: column;
-}
-.navbar-custom { background: rgba(255,255,255,.65); backdrop-filter: saturate(120%) blur(8px); -webkit-backdrop-filter: saturate(120%) blur(8px); border-bottom:1px solid var(--border); position: fixed; top: 0; width: 100%; z-index: 1000; }
-.navbar-custom a { color: var(--text) !important; }
-.navbar-custom .navbar-brand { font-weight: 700; }
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Transaction History - Engee Bank</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        :root{
+            --pink:#ff4fa3;
+            --pink-2:#ff6fb3;
+            --purple:#7b2cbf;
+            --purple-dark:#5a189a;
+            --white:#ffffff;
+        }
 
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(to right, var(--purple-dark), var(--pink));
+            color: var(--white);
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            flex-direction: column;
+        }
 
-.container { max-width: 1000px; margin-top: 110px; text-align: center; }
-h2 { margin-bottom: 18px; font-weight:700; }
+        .navbar-custom {
+            background-color: rgba(90, 24, 154, 0.85);
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1000;
+            backdrop-filter: saturate(140%) blur(4px);
+        }
 
+        .navbar-custom a { color: var(--white) !important; }
+        .navbar-custom .navbar-brand { font-weight: bold; }
 
-.table-custom {
-background-color: var(--card);
-padding: 20px; border-radius: 16px; border:1px solid var(--border); box-shadow: var(--shadow);
-overflow-x: auto;
-}
-table.table { margin-bottom: 0; }
-.table thead th { background-color: #e0e7ff; color: var(--text); border-bottom: 2px solid var(--border); font-weight:700; }
-.table-striped tbody tr:nth-of-type(odd) { background-color: var(--row); }
-.table td, .table th { color: var(--text); padding: 14px; border-top: 1px solid var(--border); }
+        .container {
+            max-width: 1000px;
+            margin-top: 90px;
+            text-align: center;
+        }
 
+        h2 { margin-bottom: 20px; }
 
-.text-success { color: #16a34a !important; }
-.text-danger { color: #dc2626 !important; }
+        .table-custom {
+            background-color: rgba(255,255,255,0.10);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 15px rgba(0,0,0,0.35);
+            overflow-x: auto;
+            border: 1px solid rgba(255,79,163,0.45);
+        }
 
+        .table-striped tbody tr:nth-of-type(odd) {
+            background-color: rgba(255,255,255,0.12);
+        }
 
-.custom-link { color: var(--brand); text-decoration: none; font-weight: 600; }
-.custom-link:hover { text-decoration: underline; }
-</style>
+        .table-striped td, .table-striped th {
+            color: var(--white);
+            font-weight: bold;
+            padding: 15px;
+            border-bottom: 1px solid var(--pink);
+        }
+
+        .table-striped th {
+            background-color: rgba(123, 44, 191, 0.35);
+        }
+
+        .text-success { color: #28a745 !important; }
+        .text-danger { color: #dc3545 !important; }
+
+        .custom-link {
+            color: var(--pink);
+            text-decoration: none;
+            font-weight: bold;
+        }
+        .custom-link:hover { color: var(--pink-2); text-decoration: underline; }
+    </style>
 </head>
 <body>
 <nav class="navbar navbar-expand-lg navbar-custom">
-<a class="navbar-brand" href="#">Engee Bank</a>
-<ul class="navbar-nav ml-auto">
-<li class="nav-item"><a class="nav-link" href="/dashboard">Dashboard</a></li>
-<li class="nav-item"><a class="nav-link" href="/transactions">Transactions</a></li>
-<li class="nav-item"><a class="nav-link" href="/logout">Logout</a></li>
-</ul>
+    <a class="navbar-brand" href="#">Engee Bank</a>
+    <ul class="navbar-nav ml-auto">
+        <li class="nav-item"><a class="nav-link" href="/dashboard">Dashboard</a></li>
+        <li class="nav-item"><a class="nav-link" href="/transactions">Transactions</a></li>
+        <li class="nav-item"><a class="nav-link" href="/logout">Logout</a></li>
+    </ul>
 </nav>
 
-
 <div class="container">
-<h2 class="text-center">Transaction History</h2>
-<div class="table-responsive table-custom">
-<table class="table table-striped">
-<thead>
-<tr>
-<th>ID</th>
-<th>Type</th>
-<th>Amount</th>
-<th>Date</th>
-</tr>
-</thead>
-<tbody>
-<tr th:each="transaction : ${transactions}">
-<td th:text="${transaction.id}"></td>
-<td th:text="${transaction.type}"></td>
-<td th:text="${transaction.amount}"
-th:classappend="${transaction.type.contains('Transfer In') || transaction.type == 'Deposit'} ? 'text-success' : 'text-danger'">
-<span th:text="${transaction.type.contains('Transfer In') || transaction.type == 'Deposit'} ? '+$' + transaction.amount : '-$' + transaction.amount"></span>
-</td>
-<td th:text="${transaction.timestamp}"></td>
-</tr>
-</tbody>
-</table>
+    <h2 class="text-center">Transaction History</h2>
+    <div class="table-responsive table-custom">
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th>ID</th>
+                <th>Type</th>
+                <th>Amount</th>
+                <th>Date</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="transaction : ${transactions}">
+                <td th:text="${transaction.id}"></td>
+                <td th:text="${transaction.type}"></td>
+                <td th:text="${transaction.amount}"
+                    th:classappend="${transaction.type.contains('Transfer In') || transaction.type == 'Deposit'} ? 'text-success' : 'text-danger'">
+                    <span th:text="${transaction.type.contains('Transfer In') || transaction.type == 'Deposit'} ? '+$' + transaction.amount : '-$' + transaction.amount"></span>
+                </td>
+                <td th:text="${transaction.timestamp}"></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <p class="text-center"><a href="/dashboard" class="custom-link">Back to Dashboard</a></p>
 </div>
 
-
-<p class="text-center"><a href="/dashboard" class="custom-link">Back to Dashboard</a></p>
-</div>
 </body>
 </html>
