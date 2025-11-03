@@ -1,4 +1,4 @@
-package com.engee.bank.controller;
+package com.example.bankapp.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -8,7 +8,7 @@ public class AuthController {
 
     @GetMapping("/login")
     public String loginPage() {
-        return "login";  // matches login.html in /templates
+        return "login";
     }
 
     @GetMapping("/register")
