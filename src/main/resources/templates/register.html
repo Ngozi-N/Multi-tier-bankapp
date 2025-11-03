@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+<style>
+:root{ --bg-start:#eef2ff; --bg-end:#f8fafc; --text:#0f172a; --muted:#475569; --brand:#4f46e5; --brand-700:#4338ca; --border:#e2e8f0; --glass:rgba(255,255,255,.65); --shadow:0 10px 25px rgba(15,23,42,.08); }
+body {
+font-family: 'Inter', system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+background: linear-gradient(135deg, var(--bg-start), var(--bg-end));
+color: var(--text);
+margin: 0; padding: 0; height: 100vh;
+display: flex; justify-content: center; align-items: center;
+}
+.navbar-custom { background: var(--glass); backdrop-filter: saturate(120%) blur(8px); -webkit-backdrop-filter: saturate(120%) blur(8px); border-bottom:1px solid var(--border); position: fixed; top:0; width:100%; z-index:1000; }
+.navbar-custom a { color: var(--text) !important; }
+.navbar-custom .navbar-brand { font-weight:700; }
+.navbar-custom .social-icons a { color: var(--text); margin-left: 15px; font-size: 1.2rem; transition: color .2s ease; }
+.navbar-custom .social-icons a:hover { color: var(--brand); }
+
+
+.container { max-width: 450px; padding: 30px; background-color: #fff; border-radius: 16px; border:1px solid var(--border); box-shadow: var(--shadow); position: relative; text-align: center; margin-top: 90px; }
+.container h2 { color: var(--text); margin-bottom: 18px; font-weight:700; }
+.form-group label { color: var(--muted); text-align: left; display: block; font-weight:600; }
+.form-group input { border:1px solid var(--border); background-color:#fff; color: var(--text); }
+.form-group input:focus { border-color: var(--brand); box-shadow: 0 0 0 .2rem rgba(79,70,229,.15); }
+
+
+.btn { background-color: var(--brand); border: none; color: #fff; transition: transform .15s ease, box-shadow .15s ease; box-shadow: 0 8px 20px rgba(79,70,229,.18); font-weight:600; }
+.btn:hover { background-color: var(--brand-700); transform: translateY(-1px); }
+.custom-link { color: var(--brand); text-decoration: none; font-weight: 600; }
+.custom-link:hover { text-decoration: underline; }
+
+
+.footer { background: var(--glass); backdrop-filter: saturate(120%) blur(8px); -webkit-backdrop-filter: saturate(120%) blur(8px); color: var(--muted); padding: 14px 0; font-size: 14px; position: fixed; bottom: 0; width: 100%; text-align: center; border-top:1px solid var(--border); }
+@keyframes shake { 0%{transform:translateX(0)}25%{transform:translateX(-5px)}50%{transform:translateX(5px)}75%{transform:translateX(-5px)}100%{transform:translateX(0)} }
+</style>
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-custom">
+<a class="navbar-brand" href="#">Engee Bank</a>
+<div class="ml-auto social-icons">
+<a href="#" target="_blank" title="YouTube"><i class="fab fa-youtube"></i></a>
+<a href="#" target="_blank" title="LinkedIn"><i class="fab fa-linkedin"></i></a>
+</div>
+</nav>
+
+
+<div class="container">
+<h2 class="text-center">Register a New Account</h2>
+<form method="post" action="/register">
+<div class="form-group">
+<label>Username:</label>
+<input type="text" class="form-control" name="username" required />
+</div>
+<div class="form-group">
+<label>Password:</label>
+<input type="password" class="form-control" name="password" required />
+</div>
+<button type="submit" class="btn btn-block">Register</button>
+</form>
+<p class="text-center mt-3">Already have an account? <a href="/login" class="custom-link">Login here</a></p>
+
+
+<div th:if="${error}" class="alert alert-danger mt-3 text-center">
+User already present.
+</div>
+</div>
+
+
+<footer class="footer">
+<p>&copy; 2025 Engee Bank. All rights reserved. | <a href="#" class="custom-link">Privacy Policy</a> | <a href="#" class="custom-link">Terms of Service</a></p>
+</footer>
+</body>
+</html>
