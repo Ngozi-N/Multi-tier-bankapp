@@ -25,4 +25,15 @@ public class AuthController {
     public String transactionsPage() {
         return "transactions";
     }
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
+    @PostMapping("/register")
+    public String register(User user) {
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        userRepository.save(user);
+        return "redirect:/login";
+    }
+
 }
